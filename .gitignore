@@ -1,0 +1,46 @@
+# --- .NET / C# Core ---
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Secrets and Local Settings (CRITICAL)
+# Exclude these to prevent leaking DB connection strings to GitHub
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# --- Docker ---
+# Ignore environment variable files containing secrets
+.env
+.env.*
+# If you generate certificates locally
+*.pem
+*.key
+
+# --- IDEs & Editors ---
+# Visual Studio
+.vs/
+*.suo
+# VS Code
+.vscode/
+# Mac
+.DS_Store
+
+# --- Web / Frontend ---
+# Dependency directories (if you switch to React/Angular/Vue later)
+node_modules/
+dist/
+build/
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- OS Generated Files ---
+Thumbs.db
+Desktop.ini

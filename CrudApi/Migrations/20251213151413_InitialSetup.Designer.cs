@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251213123945_UpdateProductSchema")]
-    partial class UpdateProductSchema
+    [Migration("20251213151413_InitialSetup")]
+    partial class InitialSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

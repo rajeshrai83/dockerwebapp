@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   db:
     image: mcr.microsoft.com/azure-sql-edge:latest
-    container_name: mssql_db
     platform: linux/arm64/v8
+    container_name: mssql_db
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Chulbul@2025
@@ -12,13 +10,7 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
-    # 1. ADD HEALTHCHECK: Docker checks every 10s if SQL is ready
-    healthcheck:
-      test: [ "CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Chulbul@2025' -Q 'SELECT 1' || exit 1" ]
-      interval: 10s
-      retries: 10
-      start_period: 10s
-      timeout: 3s
+    restart: always
 
   crud_api:
     build:
@@ -26,14 +18,12 @@ services:
       dockerfile: Dockerfile
     container_name: crud_api
     ports:
-      - "5001:8080"
+      - "5001:8080" # External Access for Browser JS
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Database=ProductDB;User Id=sa;Password=Chulbul@2025;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=db;User Id=sa;Password=Chulbul@2025;TrustServerCertificate=True;
     depends_on:
-      db:
-        # 2. WAIT FOR HEALTHY: API won't start until SQL is ready
-        condition: service_healthy
-    restart: on-failure
+      - db
+    restart: on-failure # Retries until DB is ready
 
   crud_webapp:
     build:
@@ -43,11 +33,9 @@ services:
     ports:
       - "5002:8080"
     environment:
-      # Use internal docker name 'crud_api' on port 8080
-      - ApiBaseUrl=http://crud_api:8080
+      - ApiBaseUrl=http://crud_api:8080 # Internal Access for C#
     depends_on:
-      crud_api:
-        condition: service_started
+      - crud_api
     restart: on-failure
 
 volumes:

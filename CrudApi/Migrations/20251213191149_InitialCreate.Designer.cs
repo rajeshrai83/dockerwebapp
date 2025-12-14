@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251210172924_InitialCreate")]
+    [Migration("20251213191149_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,25 +37,11 @@ namespace CrudApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Laptop",
-                            Price = 1200.00m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Mouse",
-                            Price = 25.50m
-                        });
                 });
 #pragma warning restore 612, 618
         }

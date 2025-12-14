@@ -94,3 +94,4 @@
 /Users/rajeshrai/CrudAppSolution/CrudWebApp/obj/Debug/net9.0/CrudWebApp.pdb
 /Users/rajeshrai/CrudAppSolution/CrudWebApp/obj/Debug/net9.0/CrudWebApp.genruntimeconfig.cache
 /Users/rajeshrai/CrudAppSolution/CrudWebApp/obj/Debug/net9.0/ref/CrudWebApp.dll
+/Users/rajeshrai/CrudAppSolution/CrudWebApp/obj/Debug/net9.0/CrudWebApp.sourcelink.json

@@ -154,3 +154,4 @@
 /Users/rajeshrai/CrudAppSolution/CrudApi/bin/Debug/net9.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/rajeshrai/CrudAppSolution/CrudApi/bin/Debug/net9.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/rajeshrai/CrudAppSolution/CrudApi/bin/Debug/net9.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+/Users/rajeshrai/CrudAppSolution/CrudApi/obj/Debug/net9.0/CrudApi.sourcelink.json

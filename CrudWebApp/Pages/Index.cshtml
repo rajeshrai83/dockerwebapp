@@ -1,31 +1,27 @@
 ﻿@page
 @model CrudWebApp.Pages.IndexModel
 @{
-    ViewData["Title"] = "Product Manager";
+    ViewData["Title"] = "Inventory";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex justify-content-between mb-4">
     <h2>Product Inventory</h2>
     <div>
-        <button class="btn btn-primary" onclick="openCreateModal()">
-            <i class="bi bi-plus-lg"></i> New Product
-        </button>
-        <button class="btn btn-secondary" onclick="openBulkModal()">
-            <i class="bi bi-list-check"></i> Bulk Add
-        </button>
+        <button class="btn btn-info text-white" onclick="openBulkModal()">Add Bulk</button>
+        <button class="btn btn-primary" onclick="openModal()">New Product</button>
     </div>
 </div>
 
-<table class="table table-hover table-bordered shadow-sm">
+<table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
-            <th style="width: 200px;">Actions</th>
+            <th>Actions</th>
         </tr>
     </thead>
-    <tbody id="productTableBody">
+    <tbody>
         @foreach (var p in Model.ProductData.Items)
         {
             <tr>
@@ -33,216 +29,133 @@
                 <td>@p.Name</td>
                 <td>$@p.Price</td>
                 <td>
-                    <button class="btn btn-sm btn-warning" onclick="openEditModal(@p.Id, '@p.Name', @p.Price)">
-                        Edit
-                    </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteProduct(@p.Id)">
-                        Delete
-                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="openModal(@p.Id, '@p.Name', @p.Price)">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteProduct(@p.Id)">Delete</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<nav>
-    <ul class="pagination justify-content-center">
-        <li class="page-item @(Model.ProductData.HasPrevious ? "" : "disabled")">
-            <a class="page-link" asp-route-CurrentPage="@(Model.ProductData.PageIndex - 1)">Previous</a>
-        </li>
-        @for (int i = 1; i <= Model.ProductData.TotalPages; i++)
-        {
-            <li class="page-item @(Model.ProductData.PageIndex == i ? "active" : "")">
-                <a class="page-link" asp-route-CurrentPage="@i">@i</a>
-            </li>
-        }
-        <li class="page-item @(Model.ProductData.HasNext ? "" : "disabled")">
-            <a class="page-link" asp-route-CurrentPage="@(Model.ProductData.PageIndex + 1)">Next</a>
-        </li>
-    </ul>
-</nav>
-
-
-<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="productModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="mTitle">Product</h5><button type="button" class="btn-close"
+                    data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="productId" />
-                <div class="mb-3">
-                    <label class="form-label">Name</label>
-                    <input type="text" id="productName" class="form-control" />
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Price</label>
-                    <input type="number" id="productPrice" class="form-control" step="0.01" />
-                </div>
+                <input type="hidden" id="pId">
+                <label>Name</label><input type="text" id="pName" class="form-control mb-2">
+                <label>Price</label><input type="number" id="pPrice" class="form-control" step="0.01">
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveProduct()">Save Changes</button>
-            </div>
+            <div class="modal-footer"><button class="btn btn-primary" onclick="saveProduct()">Save</button></div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="bulkModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="bulkModal" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Bulk Add Products</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Bulk Add</h5><button type="button" class="btn-close"
+                    data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <button class="btn btn-success btn-sm mb-2" onclick="addBulkRow()">+ Add Row</button>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bulkTableBody"></tbody>
-                </table>
+                <p>Format: Name, Price (one per line)</p>
+                <textarea id="bulkData" class="form-control" rows="5"></textarea>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="saveBulk()">Save All</button>
-            </div>
+            <div class="modal-footer"><button class="btn btn-primary" onclick="saveBulk()">Submit</button></div>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Point this to your API Port (5001). 
-        // Ensure you added CORS in the CrudApi/Program.cs as mentioned in the previous answer.
-        const API_URL = "http://localhost:5001";
+        const API = "http://localhost:5001";
+        let pModal, bModal;
 
-        // Variables to hold modal instances
-        let productModalInstance;
-        let bulkModalInstance;
-
-        // Initialize Bootstrap Modals when DOM is ready
-        document.addEventListener("DOMContentLoaded", function () {
-            const pModalEl = document.getElementById('productModal');
-            const bModalEl = document.getElementById('bulkModal');
-
-            if (pModalEl) productModalInstance = new bootstrap.Modal(pModalEl);
-            if (bModalEl) bulkModalInstance = new bootstrap.Modal(bModalEl);
+        document.addEventListener("DOMContentLoaded", () => {
+            pModal = new bootstrap.Modal(document.getElementById('productModal'));
+            bModal = new bootstrap.Modal(document.getElementById('bulkModal'));
         });
 
-        // --- UI FUNCTIONS (These must be in global scope) ---
+        window.openModal = (id, name, price) => {
+            document.getElementById('mTitle').innerText = id ? "Edit Product" : "New Product";
+            document.getElementById('pId').value = id || "";
+            document.getElementById('pName').value = name || "";
+            document.getElementById('pPrice').value = price || "";
+            pModal.show();
+        };
 
-        window.openCreateModal = function () {
-            document.getElementById('modalTitle').innerText = "Create Product";
-            document.getElementById('productId').value = "";
-            document.getElementById('productName').value = "";
-            document.getElementById('productPrice').value = "";
-            productModalInstance.show();
-        }
-
-        window.openEditModal = function (id, name, price) {
-            document.getElementById('modalTitle').innerText = "Edit Product";
-            document.getElementById('productId').value = id;
-            document.getElementById('productName').value = name;
-            document.getElementById('productPrice').value = price;
-            productModalInstance.show();
-        }
-
-        window.openBulkModal = function () {
-            document.getElementById('bulkTableBody').innerHTML = '';
-            addBulkRow();
-            bulkModalInstance.show();
-        }
-
-        // --- API OPERATIONS ---
+        window.openBulkModal = () => {
+            document.getElementById('bulkData').value = "";
+            bModal.show();
+        };
 
         window.saveProduct = async function () {
-            const id = document.getElementById('productId').value;
-            const name = document.getElementById('productName').value;
-            const price = document.getElementById('productPrice').value;
+            const idVal = document.getElementById('pId').value; // or 'productId'
+            const nameVal = document.getElementById('pName').value; // or 'productName'
+            const priceVal = document.getElementById('pPrice').value; // or 'productPrice'
 
+            // 1. FORCE NUMBERS (Crucial!)
             const product = {
-                id: id ? parseInt(id) : 0,
-                name: name,
-                price: parseFloat(price)
+                id: idVal ? parseInt(idVal) : 0,
+                name: nameVal,
+                price: parseFloat(priceVal)
             };
 
-            const method = id ? "PUT" : "POST";
-            const url = id ? `${API_URL}/products/${id}` : `${API_URL}/products`;
+            // 2. CHECK URL (Must match your API port 5001)
+            const url = idVal ? `http://localhost:5001/products/${idVal}` : `http://localhost:5001/products`;
+            const method = idVal ? "PUT" : "POST";
 
             try {
                 const response = await fetch(url, {
                     method: method,
-                    headers: { 'Content-Type': 'application/json' },
+                    // 3. HEADER IS MANDATORY
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(product)
                 });
 
                 if (response.ok) {
                     location.reload();
                 } else {
-                    alert("Error saving product");
+                    // Read the error message from the server
+                    const errorText = await response.text();
+                    console.error("Server Error:", errorText);
+                    alert("Error: " + errorText);
                 }
             } catch (error) {
-                console.error(error);
-                alert("API Connection Failed. Is the API running on port 5001?");
+                console.error("Network Error:", error);
+                alert("Could not connect to API at " + url);
             }
         }
 
-        window.deleteProduct = async function (id) {
-            if (!confirm("Are you sure you want to delete this?")) return;
-
-            try {
-                await fetch(`${API_URL}/products/${id}`, { method: "DELETE" });
+        window.deleteProduct = async (id) => {
+            if (confirm("Delete?")) {
+                await fetch(`${API}/products/${id}`, { method: "DELETE" });
                 location.reload();
-            } catch (error) {
-                console.error(error);
-                alert("Delete failed.");
             }
-        }
+        };
 
-        // --- BULK OPERATIONS ---
-
-        window.addBulkRow = function () {
-            const tbody = document.getElementById('bulkTableBody');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><input type="text" class="form-control bulk-name" placeholder="Name"></td>
-                <td><input type="number" class="form-control bulk-price" placeholder="Price"></td>
-                <td><button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">X</button></td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        window.saveBulk = async function () {
-            const rows = document.querySelectorAll('#bulkTableBody tr');
+        window.saveBulk = async () => {
+            const lines = document.getElementById('bulkData').value.split('\n');
             const products = [];
-
-            rows.forEach(row => {
-                const name = row.querySelector('.bulk-name').value;
-                const price = row.querySelector('.bulk-price').value;
-                if (name && price) {
-                    products.push({ name: name, price: parseFloat(price) });
-                }
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length === 2) products.push({ name: parts[0].trim(), price: parseFloat(parts[1].trim()) });
             });
 
-            if (products.length === 0) return;
-
-            try {
-                await fetch(`${API_URL}/products/bulk`, {
+            if (products.length > 0) {
+                await fetch(`${API}/products/bulk`, {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(products)
                 });
                 location.reload();
-            } catch (error) {
-                console.error(error);
-                alert("Bulk save failed.");
             }
-        }
+        };
     </script>
 }
