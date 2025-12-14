@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudWebApp", "CrudWebApp\Cr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudApi", "CrudApi\CrudApi.csproj", "{86129430-BE8C-41AF-B1BC-AD29B1D6D471}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrudApi.Tests", "CrudApi.Tests\CrudApi.Tests.csproj", "{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{86129430-BE8C-41AF-B1BC-AD29B1D6D471}.Release|x64.Build.0 = Release|Any CPU
 		{86129430-BE8C-41AF-B1BC-AD29B1D6D471}.Release|x86.ActiveCfg = Release|Any CPU
 		{86129430-BE8C-41AF-B1BC-AD29B1D6D471}.Release|x86.Build.0 = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|x64.Build.0 = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|x64.ActiveCfg = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|x64.Build.0 = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F0D1E99-BB3C-42A2-8AD3-25E0221D3FBF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -74,7 +74,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // 4. API Endpoints
-app.MapGet("/products", async (int? page, int? pageSize, AppDbContext db) =>
+/* app.MapGet("/products", async (int? page, int? pageSize, AppDbContext db) =>
 {
     int p = page ?? 1; int s = pageSize ?? 10;
     var items = await db.Products.OrderByDescending(x => x.Id).Skip((p - 1) * s).Take(s).ToListAsync();
@@ -108,5 +108,7 @@ app.MapPost("/products/bulk", async (List<Product> products, AppDbContext db) =>
 {
     db.Products.AddRange(products); await db.SaveChangesAsync(); return Results.Ok();
 });
+
+*/
 
 app.Run();
